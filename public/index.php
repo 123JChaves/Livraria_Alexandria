@@ -94,7 +94,7 @@ session_start();
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="index">
-                <img src="images/logo.png" alt="Show de Feira">
+                <img src="images/logo.jpg" alt="Livraria Alexandria">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -115,7 +115,7 @@ session_start();
                     </li>
                 </ul>
                 <div class="d-flex" role="search">
-                    Olá <?=$_SESSION["alexexandria"]["nome"]?>
+                    Olá <?=$_SESSION["alexandria"]["nome"]?>
                     <a href="index/sair" title="sair" class="btn btn-danger">
                         <i class="fas fa-power-of"></i>Sair
                     </a>
