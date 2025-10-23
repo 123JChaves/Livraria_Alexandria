@@ -52,6 +52,14 @@
 
             return $consulta->execute();
         }
+             public function listar() {
+            $sql = "select id, nome, telefone from usuario order by nome";
+            $consulta = $this->pdo->prepare($sql);
+            $consulta->execute();
+
+            return $consulta->fetchAll(PDO::FETCH_OBJ);
+
+        }
 
 
     }
