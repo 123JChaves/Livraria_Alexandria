@@ -9,6 +9,11 @@ body {
     margin: auto;
 }
 
+.login .card .card-header img{
+    width: 320px;
+    height: 100px;
+}
+
 .alert {
     margin: 0;
     padding: 0 10px;
@@ -46,9 +51,4 @@ body {
     background: #FFF;
     padding: 10px 0 10px;
     box-shadow: 0 0 10px #ccc;
-}
-
-.logo.jpg {
-    width: 100px;
-    height: 100px;
 }
