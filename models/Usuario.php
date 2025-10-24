@@ -28,7 +28,7 @@
         }
 
         public function salvar($dados) {
-            if(empty($dados->id)) {
+            if(empty($dados["id"])) {
                 $sql = "insert into usuario (id, nome, email, senha, telefone, ativo)
                 values (NULL, :nome, :email, :senha, :telefone, :ativo)";
                 $consulta = $this->pdo->prepare($sql);
@@ -37,22 +37,32 @@
                 $consulta->bindParam(":senha", $dados["senha"]);
                 $consulta->bindParam(":telefone", $dados["telefone"]);
                 $consulta->bindParam(":ativo", $dados["ativo"]);
-            } else {
+            } else if (empty($dados->senha)) {
                 //atualizar produto
-                $sql = "update usuario set nome = :nome, email = :email, senha = :senha, telefone = :telefone,
+                $sql = "update usuario set nome = :nome, email = :email, telefone = :telefone,
                 ativo = :ativo where id = :id";
                 $consulta = $this->pdo->prepare($sql);
                 $consulta->bindParam(":id", $dados["id"]);
                 $consulta->bindParam(":nome", $dados["nome"]);
                 $consulta->bindParam(":email", $dados["email"]);
-                $consulta->bindParam(":senha", $dados["senha"]);
                 $consulta->bindParam(":telefone", $dados["telefone"]);
                 $consulta->bindParam(":ativo", $dados["ativo"]);
+            } else {
+                $sql = "update usuario set nome = :nome, email = :email, telefone = :telefone,
+                senha = :senha, ativo = :ativo where id = :id";
+                $consulta = $this->pdo->prepare($sql);
+                $consulta->bindParam(":id", $dados["id"]);
+                $consulta->bindParam(":nome", $dados["nome"]);
+                $consulta->bindParam(":email", $dados["email"]);
+                $consulta->bindParam(":telefone", $dados["telefone"]);
+                $consulta->bindParam(":ativo", $dados["ativo"]);
+                $consulta->bindParam(":senha", $dados["senha"]);
+
             }
 
             return $consulta->execute();
         }
-             public function listar() {
+            public function listar() {
             $sql = "select id, nome, telefone from usuario order by nome";
             $consulta = $this->pdo->prepare($sql);
             $consulta->execute();
