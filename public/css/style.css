@@ -3,15 +3,12 @@ body {
     color: #333;
 }
 
+
+
 .login {
     width: 380px;
     padding: 100px 10px;
     margin: auto;
-}
-
-.login .card .card-header img{
-    width: 320px;
-    height: 100px;
 }
 
 .alert {
