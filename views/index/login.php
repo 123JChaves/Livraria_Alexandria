@@ -1,7 +1,7 @@
 <div class="login">
     <div class="card">
         <div class="card-header">
-            <img src="images/logo.jpg" alt="Livraria Alexandria">
+            <img src="images/logo2.jpg" alt="Livraria Alexandria">
         </div>
         <div class="card-body">
             <form name="form1" method="post" data-parsley-validate="">
