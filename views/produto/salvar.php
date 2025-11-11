@@ -6,6 +6,7 @@
     $descricao = trim($_POST["descricao"] ?? NULL);
     $valor = $_POST["valor"] ?? NULL;
     $ativo = $_POST["ativo"] ?? NULL;
+    $autor = trim($_POST["autor"] ?? NULL);
     $destaque = $_POST["destaque"] ?? NULL;
 
     //1.500,00 -> 1500,00
@@ -21,6 +22,8 @@
         echo"<script>mensagem('Digite a descrição','produto','error');</script>";
     } else if (empty($valor)) {
         echo"<script>mensagem('Digite o valor','produto','error');</script>";
+    } else if (empty($autor)) {
+        echo"<script>mensagem('Selecione o autor','produto','error');</script>";
     } else if (empty($ativo)) {
         echo"<script>mensagem('Selecione se está ativo','produto','error');</script>";
     } else if (empty($destaque)) {

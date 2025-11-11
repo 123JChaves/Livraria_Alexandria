@@ -4,7 +4,7 @@
     $id = $_GET["id"] ?? NULL;
     $categoria = $_GET["categoria"] ?? NULL;
 
-    require_once "../../config/Conexao.php";
+    require "../../config/Conexao.php";
 
     $db = new Conexao();
     $pdo = $db->conectar();

@@ -17,6 +17,7 @@
     $ativo = $dados->ativo ?? NULL;
     $destaque = $dados->destaque ?? NULL;
     $imagem = $dados->imagem ?? NULL;
+    $autor = $dados->autor ?? NULL;
 
     $valor = number_format($valor,2,",",".");
 ?>
@@ -73,6 +74,17 @@
                         </script>
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <label for="autor">Autor:</label>
+                        <input type="text" name="autor" id="autor" class="form-control"
+                        required data-parsley-required-message="Digite o nome do autor"
+                        value="<?=$autor?>">
+                        </input>
+                    </div>
+                </div>
+                <br>
                 <br>
                 <div class="row">
                     <div class="col-12 col-md-12">

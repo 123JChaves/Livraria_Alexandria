@@ -20,6 +20,7 @@
                         <td>ID</td>
                         <td>Imagem</td>
                         <td>Nome do Produto</td>
+                        <td>Autor</td>
                         <td>Valor</td>
                         <td>Ativo</td>
                         <td>Opções</td>
@@ -43,6 +44,7 @@
                                     <img src="arquivos/<?=$dados->imagem?>" width="100px">
                                 </td>
                                 <td><?=$dados->nome?></td>
+                                <td><?=$dados->autor?><td>
                                 <td>R$ <?=$valor?></td>
                                 <td><?=$ativo?></td>
                                 <td>

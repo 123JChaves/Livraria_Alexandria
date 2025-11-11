@@ -16,7 +16,7 @@
 
         public function index() {
 
-            require "../views/index/home.php";
+            require "../views/index/index.php";
 
         }
 
