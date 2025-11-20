@@ -113,6 +113,9 @@ session_start();
                     <li class="nav-item">
                         <a class="nav-link" href="usuario">Usuário</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard">Dashboard</a>
+                    </li>
                 </ul>
                 <div class="d-flex" role="search">
                     Olá <?=$_SESSION["alexandria"]["nome"]?>
