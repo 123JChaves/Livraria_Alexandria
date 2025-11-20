@@ -2,7 +2,7 @@
     require "../config/Conexao.php";
 
     class DashboardController {
-        public function dashboard() {
+        public function index() {
             require "../views/dashboard/dashboard.php";
         }
     }
