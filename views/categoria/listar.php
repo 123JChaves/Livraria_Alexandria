@@ -1,3 +1,15 @@
+<style>
+    a.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}
+</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -30,12 +42,12 @@
                                 <td><?=$dados->descricao?></td>
                                 <td><?=$status?></td>
                                 <td>
-                                    <a href="categoria/index/<?=$dados->id?>" class="btn btn-success"
+                                    <a href="categoria/index/<?=$dados->id?>" class="btn btn-dark mt-2 border-0 rounded-4"
                                     title="Editar">
                                     <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <a href="javascript:excluir(<?=$dados->id?>)" class="btn btn-danger"
+                                    <a href="javascript:excluir(<?=$dados->id?>)" class="btn btn-danger mt-2 border-0 rounded-4"
                                     title="Excluir">
                                         <i class="fas fa-trash"></i>
                                     </a>

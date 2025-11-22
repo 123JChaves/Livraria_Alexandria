@@ -14,9 +14,19 @@ if (!empty($id)) {
     $descricao = $dados->descricao;
     $ativo = $dados->ativo;
 }
-
 ?>
+<style>
+    a.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
 
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}
+</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -24,10 +34,10 @@ if (!empty($id)) {
                 <h2>Cadastro de Categorias</h2>
             </div>
             <div class="float-end">
-                <a href="categoria" class="btn btn-info">
+                <a href="categoria" class="btn btn-dark mt-2 border-0 rounded-4">
                     Novo Registro
                 </a>
-                <a href="categoria/listar" class="btn btn-info">
+                <a href="categoria/listar" class="btn btn-dark mt-2 border-0 rounded-4">
                     Listar Registros
                 </a>
             </div>
@@ -58,7 +68,7 @@ if (!empty($id)) {
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-success">
+                <button type="submit" class="btn btn-dark mt-2 border-0 rounded-4">
                     Enviar Dados
                 </button>
             </form>

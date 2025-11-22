@@ -21,7 +21,18 @@
 
     $valor = number_format($valor,2,",",".");
 ?>
+<style>
+    a.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
 
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}
+</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -29,10 +40,10 @@
                 <h2>Cadastro de Produtos</h2>
             </div>
             <div class="float-end">
-                <a href="produto" class="btn btn-success">
+                <a href="produto" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-file"></i> Adicionar Novo
                 </a>
-                <a href="produto/listar" class="btn btn-success">
+                <a href="produto/listar" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-search"></i> Listar
                 </a>
             </div>
@@ -134,7 +145,7 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-success float-end">
+                <button type="submit" class="btn btn-dark mt-2 border-0 rounded-4 float-end">
                     <i class="fas fa-check"></i> Salvar/Alterar
                 </button>
             </form>

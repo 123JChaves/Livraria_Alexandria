@@ -10,17 +10,28 @@
     $ativo = $dados->ativo ?? NULL;
 
 ?>
+<style>
+    a.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
 
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}
+</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
             <h2 class="float-start">Cadastro de Usuários</h2>
             <div class="float-end">
-                <a href="usuario" title="Novo Registro" class="btn btn-success">
+                <a href="usuario" title="Novo Registro" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-file"></i> Novo Registro
                 </a>
 
-                <a href="usuario/listar" title="Listar" class="btn btn-success">
+                <a href="usuario/listar" title="Listar" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-file"></i> Listar
                 </a>
             </div>
@@ -79,7 +90,7 @@
                     </div>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-success float-end">
+                <button type="submit" class="btn btn-dark mt-2 border-0 rounded-4 float-end">
                     <i class="fas fa-check"></i>Slavar/Atualizar Dados
                 </button>
             </form>

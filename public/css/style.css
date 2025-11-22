@@ -49,3 +49,14 @@ body {
     padding: 10px 0 10px;
     box-shadow: 0 0 10px #ccc;
 }
+
+.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}

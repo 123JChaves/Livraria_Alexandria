@@ -119,7 +119,7 @@ session_start();
                 </ul>
                 <div class="d-flex" role="search">
                     Olá <?=$_SESSION["alexandria"]["nome"]?>
-                    <a href="index/sair" title="sair" class="btn btn-danger">
+                    <a href="index/sair" title="sair" class="btn btn-danger mt-2 border-0 rounded-4">
                         <i class="fas fa-power-of"></i>Sair
                     </a>
                 </div>
@@ -137,7 +137,7 @@ session_start();
 
             $controller = ucfirst($controller)."Controller";
 
-            if (file_exists("../controllers/{$controller}.php") ) {            
+            if (file_exists("../controllers/{$controller}.php") ) {
                 require "../controllers/{$controller}.php";
                 $control = new $controller();
                 $control->$acao($id);

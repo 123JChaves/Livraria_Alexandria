@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     async function getData() {
-        const url = "http://localhost/Livraria_Alexandria/public/apis/quantidadeItens.php";
+        const url = "http://localhost/Livraria_Alexandria/public/apis/itensCliente.php";
         try {
             const response = await fetch(url);
             console.log('Gráfico criado com sucesso!');
@@ -20,10 +20,10 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: result.map(produto => produto.nome),
+                    labels: result.map(cliente => cliente.nome),
                     datasets: [{
-                        label: 'Quantidade de vendas por itens',
-                        data: result.map(item => item.quantidade_vendida),
+                        label: 'Quantidade de itens vendidos por cliente',
+                        data: result.map(cliente => cliente.total_itens),
                         borderWidth: 2,
                         barThickness: 100
                     }]

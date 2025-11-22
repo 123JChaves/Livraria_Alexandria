@@ -1,3 +1,15 @@
+<style>
+    a.btn-dark:hover {
+        background-color: #1d5c83ff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+button[type="submit"]:hover {
+        background-color: #1d5c83ff;
+        transition: background-color 0.3s ease;
+}
+</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -5,10 +17,10 @@
                 <h2>Listagem de Produtos</h2>
             </div>
             <div class="float-end">
-                <a href="produto" class="btn btn-success">
+                <a href="produto" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-file"></i> Adicionar Novo
                 </a>
-                <a href="produto/listar" class="btn btn-success">
+                <a href="produto/listar" class="btn btn-dark mt-2 border-0 rounded-4">
                     <i class="fas fa-search"></i> Listar
                 </a>
             </div>
@@ -48,11 +60,11 @@
                                 <td>R$ <?=$valor?></td>
                                 <td><?=$ativo?></td>
                                 <td>
-                                    <a href="produto/index/<?=$dados->id?>" class="btn btn-success">
+                                    <a href="produto/index/<?=$dados->id?>" class="btn btn-dark mt-2 border-0 rounded-4">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a href="javascript:excluir(<?=$dados->id?>,'produto')"
-                                    class="btn btn-danger">
+                                    class="btn btn-danger mt-2 border-0 rounded-4">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
