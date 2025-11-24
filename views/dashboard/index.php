@@ -1,15 +1,3 @@
-<style>
-    a.btn-dark:hover {
-        background-color: #1d5c83ff;
-        color: #fff;
-        transition: background-color 0.3s ease;
-    }
-
-button[type="submit"]:hover {
-        background-color: #1d5c83ff;
-        transition: background-color 0.3s ease;
-}
-</style>
 <div class="container">
     <div class="card">
         <div class="card-header">

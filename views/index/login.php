@@ -1,7 +1,7 @@
 <div class="login">
     <div class="card">
         <div class="card-header">
-            <img src="images/logo2.jpg" alt="Livraria Alexandria">
+            <img src="images/logo2.png" alt="Livraria Alexandria">
         </div>
         <div class="card-body">
             <form name="form1" method="post" data-parsley-validate="">
@@ -23,27 +23,10 @@
                 </div>
                 <div id="erro"></div>
                 <br>
-                <button type="submit" class="btn btn-success w-100">
+                <button type="submit" class="btn btn-dark mt-2 border-0 rounded-4 w-100">
                     <i class="fas fa-check"></i>Fazer login
                 </button>
             </form>
         </div>
     </div>
 </div>
-<style>
-    a.btn-dark:hover {
-        background-color: #3e8dbeff;
-        color: #fff;
-        transition: background-color 0.3s ease;
-    }
-
-button[type="submit"]:hover {
-        background-color: #3e8dbeff;
-        transition: background-color 0.3s ease;
-}
-a.btn-danger:hover {
-        background-color: #ffffffff;
-        color: #ff1c1cff;
-        transition: background-color 0.3s ease;
-    }
-</style>
