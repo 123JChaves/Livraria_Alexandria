@@ -1,15 +1,3 @@
-<style>
-    a.btn-dark:hover {
-        background-color: #1d5c83ff;
-        color: #fff;
-        transition: background-color 0.3s ease;
-    }
-
-button[type="submit"]:hover {
-        background-color: #1d5c83ff;
-        transition: background-color 0.3s ease;
-}
-</style>
 <div class="container">
     <div class="card">
         <div class="card-header">
@@ -32,8 +20,8 @@ button[type="submit"]:hover {
                         <td>ID</td>
                         <td>Imagem</td>
                         <td>Nome do Produto</td>
-                        <td>Autor</td>
                         <td>Valor</td>
+                        <td>Quantidade</td>
                         <td>Ativo</td>
                         <td>Opções</td>
                     </tr>
@@ -56,8 +44,8 @@ button[type="submit"]:hover {
                                     <img src="arquivos/<?=$dados->imagem?>" width="100px">
                                 </td>
                                 <td><?=$dados->nome?></td>
-                                <td><?=$dados->autor?><td>
                                 <td>R$ <?=$valor?></td>
+                                <td><?=$dados->quantidade?></td>
                                 <td><?=$ativo?></td>
                                 <td>
                                     <a href="produto/index/<?=$dados->id?>" class="btn btn-dark mt-2 border-0 rounded-4">
@@ -77,3 +65,20 @@ button[type="submit"]:hover {
         </div>
     </div>
 </div>
+<style>
+    a.btn-dark:hover {
+        background-color: #3e8dbeff;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+button[type="submit"]:hover {
+        background-color: #3e8dbeff;
+        transition: background-color 0.3s ease;
+}
+a.btn-danger:hover {
+        background-color: #ffffffff;
+        color: #ff1c1cff;
+        transition: background-color 0.3s ease;
+    }
+</style>

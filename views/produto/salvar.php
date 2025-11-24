@@ -8,6 +8,7 @@
     $ativo = $_POST["ativo"] ?? NULL;
     $autor = trim($_POST["autor"] ?? NULL);
     $destaque = $_POST["destaque"] ?? NULL;
+    $quantidade = $_POST["quantidade"] ?? NULL;
 
     //1.500,00 -> 1500,00
     $valor = str_replace(".", "", $valor);
@@ -28,7 +29,10 @@
         echo"<script>mensagem('Selecione se está ativo','produto','error');</script>";
     } else if (empty($destaque)) {
         echo"<script>mensagem('Selecione o destaque','produto','error');</script>";
+    } else if (empty($destaque)) {
+        echo"<script>mensagem('Selecione a quantidade','produto','error');</script>";
     } else {
+
 
     }
 

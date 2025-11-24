@@ -18,20 +18,26 @@
     $destaque = $dados->destaque ?? NULL;
     $imagem = $dados->imagem ?? NULL;
     $autor = $dados->autor ?? NULL;
+    $quantidade = $dados->quantidade ?? NULL;
 
     $valor = number_format($valor,2,",",".");
 ?>
 <style>
     a.btn-dark:hover {
-        background-color: #1d5c83ff;
+        background-color: #3e8dbeff;
         color: #fff;
         transition: background-color 0.3s ease;
     }
 
 button[type="submit"]:hover {
-        background-color: #1d5c83ff;
+        background-color: #3e8dbeff;
         transition: background-color 0.3s ease;
 }
+a.btn-danger:hover {
+        background-color: #ffffffff;
+        color: #ff1c1cff;
+        transition: background-color 0.3s ease;
+    }
 </style>
 <div class="container">
     <div class="card">
@@ -92,6 +98,13 @@ button[type="submit"]:hover {
                         <input type="text" name="autor" id="autor" class="form-control"
                         required data-parsley-required-message="Digite o nome do autor"
                         value="<?=$autor?>">
+                        </input>
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <label for="autor">Quantidade:</label>
+                        <input type="text" name="quantidade" id="quantidade" class="form-control"
+                        required data-parsley-required-message="Digite a quantidade"
+                        value="<?=$quantidade?>">
                         </input>
                     </div>
                 </div>
