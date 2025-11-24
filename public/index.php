@@ -117,9 +117,9 @@ session_start();
                         <a class="nav-link" href="dashboard">Dashboard</a>
                     </li>
                 </ul>
-                <div class="d-flex" role="search">
+                <div class="d-flex align-items-center gap-4" role="search">
                     Olá <?=$_SESSION["alexandria"]["nome"]?>
-                    <a href="index/sair" title="sair" class="btn btn-danger mt-2 border-0 rounded-4">
+                    <a href="index/sair" title="sair" class="btn btn-danger border-0 rounded-4">
                         <i class="fas fa-power-of"></i>Sair
                     </a>
                 </div>
