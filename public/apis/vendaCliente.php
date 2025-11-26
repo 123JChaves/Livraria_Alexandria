@@ -15,6 +15,6 @@ $sql = "select c.nome, sum(i.valor * i.qtde) as total_vendido
 $consulta = $pdo->prepare($sql);
 $consulta->execute();
 
-$dadosCategoria = $consulta->fetchAll(PDO::FETCH_ASSOC);
+$dadosVendaClientes = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
-echo json_encode($dadosCategoria);
+echo json_encode($dadosVendaClientes);

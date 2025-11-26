@@ -1,6 +1,6 @@
 <?php
         header("Content-Type: application/json");
-        
+
         require_once "../../config/Conexao.php";
 
         $db = new Conexao();
@@ -16,6 +16,6 @@
         $consulta = $pdo->prepare($sql);
         $consulta->execute();
 
-        $dadosCategoria = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $dadosItensClientes = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
-        echo json_encode($dadosCategoria);
+        echo json_encode($dadosItensClientes);

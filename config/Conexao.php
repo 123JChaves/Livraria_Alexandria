@@ -4,7 +4,7 @@
         private static $host = "localhost";
         private static $usuario = "root";
         private static $banco = "alexandria";
-        private static $senha = "123456";
+        private static $senha = "";
 
         public static function conectar() {
             try {

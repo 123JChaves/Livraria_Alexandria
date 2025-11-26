@@ -9,6 +9,6 @@
     $consulta = $pdo->prepare($sql);
     $consulta->execute();
 
-    $dadosCategoria = $consulta->fetchAll(PDO::FETCH_ASSOC);
+    $dadosDestaques = $consulta->fetchAll(PDO::FETCH_ASSOC);
 
-    echo json_encode($dadosCategoria);
+    echo json_encode($dadosDestaques);

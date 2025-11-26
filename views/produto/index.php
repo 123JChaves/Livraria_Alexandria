@@ -5,22 +5,22 @@
 
 <?php
 
-    if (!empty($id)) {
-        $dados = $this->produto->editar($id);
-    }
+if (!empty($id)) {
+    $dados = $this->produto->editar($id);
+}
 
-    $id = $dados->id ?? NULL;
-    $nome = $dados->nome ?? NULL;
-    $categoria_id = $dados->categoria_id ?? NULL;
-    $descricao = $dados->descricao ?? NULL;
-    $valor = $dados->valor ?? NULL;
-    $ativo = $dados->ativo ?? NULL;
-    $destaque = $dados->destaque ?? NULL;
-    $imagem = $dados->imagem ?? NULL;
-    $autor = $dados->autor ?? NULL;
-    $quantidade = $dados->quantidade ?? NULL;
+$id = $dados->id ?? NULL;
+$nome = $dados->nome ?? NULL;
+$categoria_id = $dados->categoria_id ?? NULL;
+$descricao = $dados->descricao ?? NULL;
+$valor = $dados->valor ?? NULL;
+$ativo = $dados->ativo ?? NULL;
+$destaque = $dados->destaque ?? NULL;
+$imagem = $dados->imagem ?? NULL;
+$autor = $dados->autor ?? NULL;
+$quantidade = $dados->quantidade ?? NULL;
 
-    $valor = number_format($valor,2,",",".");
+$valor = number_format($valor, 2, ",", ".");
 ?>
 
 <div class="container">
@@ -39,39 +39,40 @@
             </div>
         </div>
         <div class="card-body">
-            <form name="formCadastro" method="post" action="produto/salvar" enctype="multipart/form-data"
+            <form name="formCadastro" method="post" action="produto/salvar" enctype="multipart/form-data" 
             data-parsley-validate="">
                 <div class="row">
                     <div class="col-12 col-md-1">
                         <label for="id">ID:</label>
-                        <input type="text" readonly name="id" id="id" class="form-control"
-                        value="<?=$id?>">
+                        <input type="text" readonly name="id" id="id" class="form-control" value="<?= $id ?>">
                     </div>
                     <div class="col-12 col-md-8">
                         <label for="nome">Nome do Produto:</label>
-                        <input type="text" name="nome" id="nome" class="form-control"
-                        required data-parsley-required-message="Digite o nome do produto"
-                        value="<?=$nome?>">
+                        <input type="text" name="nome" id="nome" class="form-control" required 
+                        data-parsley-required-message="Digite o nome do produto" value="<?= $nome ?>">
                     </div>
                     <div class="col-12 col-md-3">
                         <label for="categoria_id">Categoria:</label>
-                        <select name="categoria_id" id="categoria_id" class="form-control"
+                        <select name="categoria_id" id="categoria_id" class="form-control" 
                         required data-parsley-required-message="Selecione uma categoria">
                             <option value=""></option>
-                            <?php
-                                $dadosCategoria = $this->produto->listarCategoria();
-                                foreach($dadosCategoria as $dados) {
-                                    ?>
-                                    <option value="<?=$dados->id?>">
-                                        <?=$dados->descricao?>
-                                    </option>
-                                    <?php
+                            
+                            <?php 
+                            
+                            $dadosCategoria = $this->produto->listarCategoria(); 
+                            foreach ($dadosCategoria as $dados) { 
                                 
-                                }
+                            ?>
+                                <option value="<?= $dados->id ?>">
+                                    <?= $dados->descricao ?>
+                                </option>
+                            <?php 
+                        } 
+                        
                             ?>
                         </select>
                         <script>
-                            $("#categoria_id").val(<?=$categoria_id?>);
+                            $("#categoria_id").val(<?= $categoria_id ?>);
                         </script>
                     </div>
                 </div>
@@ -79,17 +80,19 @@
                 <div class="row">
                     <div class="col-12 col-md-4">
                         <label for="autor">Autor:</label>
-                        <input type="text" name="autor" id="autor" class="form-control"
-                        required data-parsley-required-message="Digite o nome do autor"
-                        value="<?=$autor?>">
-                        </input>
+                        <input type="text" name="autor" id="autor" class="form-control" required data-parsley-required-message="Digite o nome do autor" value="<?= $autor ?>">
                     </div>
-                    <div class="col-12 col-md-1">
-                        <label for="autor">Quantidade:</label>
-                        <input type="text" name="quantidade" id="quantidade" class="form-control"
-                        required data-parsley-required-message="Digite a quantidade"
-                        value="<?=$quantidade?>">
-                        </input>
+                    <div class="col-12 col-md-2">
+                        <label for="quantidade">Quantidade Atual:</label>
+                        <input type="text" readonly name="quantidade" id="quantidade" class="form-control" value="<?= $quantidade ?>">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label for="adicionar_quantidade">Adicionar Quantidade:</label>
+                        <input type="number" name="adicionar_quantidade" id="adicionar_quantidade" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label for="subtrair_quantidade">Subtrair Quantidade:</label>
+                        <input type="number" name="subtrair_quantidade" id="subtrair_quantidade" class="form-control">
                     </div>
                 </div>
                 <br>
@@ -97,47 +100,40 @@
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <label for="descricao">Descrição do Produto:</label>
-                        <textarea name="descricao" id="descricao" class="form-control"
-                        required data-parsley-required-message="Digite a descrição do produto"
-                        ><?=$descricao?></textarea>
+                        <textarea name="descricao" id="descricao" class="form-control" required data-parsley-required-message="Digite a descrição do produto"><?= $descricao ?></textarea>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <label for="descricao">Selecione uma foto JPG:</label>
-                        <input type="file" name="imagem" id="imagem" class="form-control"
-                        accept=".jpg">
-                        <input type="hidden" name="imagem" value="<?=$imagem?>">
+                        <input type="file" name="imagem" id="imagem" class="form-control" accept=".jpg">
+                        <input type="hidden" name="imagem" value="<?= $imagem ?>">
                     </div>
                     <div class="col-12 col-md-2">
                         <label for="valor">Valor:</label>
-                        <input type="text" name="valor" id="valor" class="form-control"
-                        required data-parsley-required-message="Digite o valor"
-                        value="<?=$valor?>">
+                        <input type="text" name="valor" id="valor" class="form-control" required data-parsley-required-message="Digite o valor" value="<?= $valor ?>">
                     </div>
                     <div class="col-12 col-md-2">
                         <label for="destaque">destaque:</label>
-                            <select name="destaque" id="destaque" class="form-control" required
-                            data-parsley-require-message="Selecione">
+                        <select name="destaque" id="destaque" class="form-control" required data-parsley-require-message="Selecione">
                             <option value=""></option>
                             <option value="S">Sim</option>
                             <option value="N">Não</option>
-                            </select>
+                        </select>
                         <script>
-                            $("#destaque").val("<?=$destaque?>");
+                            $("#destaque").val("<?= $destaque ?>");
                         </script>
                     </div>
                     <div class="col-12 col-md-2">
                         <label for="ativo">Ativo:</label>
-                            <select name="ativo" id="ativo" class="form-control" required
-                            data-parsley-require-message="Selecione">
+                        <select name="ativo" id="ativo" class="form-control" required data-parsley-require-message="Selecione">
                             <option value=""></option>
                             <option value="S">Sim</option>
                             <option value="N">Não</option>
-                            </select>
+                        </select>
                         <script>
-                            $("#ativo").val("<?=$ativo?>");
+                            $("#ativo").val("<?= $ativo ?>");
                         </script>
                     </div>
                 </div>
@@ -156,6 +152,9 @@
         });
     })
     $(function() {
-        $('#valor').maskMoney({thousands:".",decimal:","});
+        $('#valor').maskMoney({
+            thousands: ".",
+            decimal: ","
+        });
     })
 </script>
