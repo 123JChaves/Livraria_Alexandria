@@ -9,7 +9,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Controle - Livraria Alexandria</title>
 
-    <base href="http://<?=$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];?>">
+    <base href="http://<?= $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME']; ?>">
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/all.min.css">
@@ -62,7 +62,6 @@ session_start();
                 }
             });
         }
-
     </script>
 
 </head>
@@ -91,62 +90,64 @@ session_start();
 
     ?>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid" >
-            <a class="navbar-brand" href="index">
-                <img src="images/logo3.png" alt="Livraria Alexandria" width="200">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="categoria">Categoria</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="produto">Produto</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="usuario">Usuário</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard">Dashboard</a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center gap-4" role="search">
-                    Olá <?=$_SESSION["alexandria"]["nome"]?>
-                    <a href="index/sair" title="sair" class="btn btn-danger border-0 rounded-4">
-                        <i class="fas fa-power-of"></i>Sair
-                    </a>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index">
+                    <img src="images/logo3.png" alt="Livraria Alexandria" width="200">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="categoria">Categoria</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="produto">Produto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="usuario">Usuário</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="cliente/listarClientes">Lista de Clientes</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-4" role="search">
+                        Olá <?= $_SESSION["alexandria"]["nome"] ?>
+                        <a href="index/sair" title="sair" class="btn btn-danger border-0 rounded-4">
+                            <i class="fas fa-power-of"></i>Sair
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <main>
-        <?php
-            $param = explode("/",$_GET["param"]);
+        <main>
+            <?php
+            $param = explode("/", $_GET["param"]);
             //print_r($param);
             $controller = $param[0] ?? 'index';
             $acao = $param[1] ?? 'index';
             $id = $param[2] ?? NULL;
 
-            $controller = ucfirst($controller)."Controller";
+            $controller = ucfirst($controller) . "Controller";
 
-            if (file_exists("../controllers/{$controller}.php") ) {
+            if (file_exists("../controllers/{$controller}.php")) {
                 require "../controllers/{$controller}.php";
                 $control = new $controller();
                 $control->$acao($id);
-            } 
-            else {
+            } else {
                 require "../views/index/erro.php";
             }
-        ?>
-    </main>
+            ?>
+        </main>
 
     <?php
 
@@ -163,13 +164,14 @@ session_start();
         transition: background-color 0.3s ease;
     }
 
-button[type="submit"]:hover {
+    button[type="submit"]:hover {
         background-color: #263055;
         transition: background-color 0.3s ease;
-}
-a.btn-danger:hover {
+    }
+
+    a.btn-danger:hover {
         background-color: #ffffffff;
         color: #ff1c1cff;
         transition: background-color 0.3s ease;
-}
+    }
 </style>

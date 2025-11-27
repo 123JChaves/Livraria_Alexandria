@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 26/11/2025 às 08:28
+-- Tempo de geração: 27/11/2025 às 22:41
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -69,21 +69,107 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_massivo_na_tabela_produto` (
     COMMIT;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `querys_cliente_compras` (IN `p_cliente_id` INT)   begin
+	-- Nome do cliente
+	select c.nome as nome_cliente
+	from cliente c
+	where c.id = p_cliente_id;
+	
+    -- Valor total de compras do cliente
+    select sum(i.qtde * i.valor) AS valor_total_compras
+    from pedido p
+    inner join item i ON p.id = i.pedido_id
+    where p.cliente_id = p_cliente_id;
+
+    -- Quantidade total de itens comprados pelo cliente
+    select sum(i.qtde) as quantidade_itens_comprados
+    from pedido p
+    inner join item i ON p.id = i.pedido_id
+    where p.cliente_id = p_cliente_id;
+
+    -- Itens comprados pelo cliente e valor de cada item
+    select pr.nome as produto, 
+    sum(i.qtde ) as quantidade_itens_comprados,
+        i.valor as valor_unitario,
+    sum(i.qtde * i.valor) as valor_total_itens
+    from pedido p
+    inner join item i ON p.id = i.pedido_id
+    inner join produto pr ON i.produto_id = pr.id
+    where p.cliente_id = p_cliente_id
+    group by pr.nome, i.valor;
+
+    -- Itens comprados pelo cliente, quantidade e valor total
+    select pr.nome AS produto,
+        sum(i.qtde) AS quantidade_itens_comprados,
+        sum(i.qtde * i.valor) AS valor_total_itens
+    from pedido p
+    inner join item i ON p.id = i.pedido_id
+    inner join produto pr ON i.produto_id = pr.id
+    where p.cliente_id = p_cliente_id
+    group by pr.nome;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `querys_cliente_compras2` (IN `p_cliente_id` INT)   begin
+    select 
+        c.nome as nome_cliente, 
+        (select sum(i.qtde * i.valor) from pedido p inner join item i ON p.id = i.pedido_id where p.cliente_id = p_cliente_id) AS valor_total_compras,
+        pr.nome as produto, 
+        i.valor as valor_unitario, 
+        sum(i.qtde) as quantidade_itens_comprados, 
+        sum(i.qtde * i.valor) as valor_total_itens 
+    from 
+        cliente c 
+    inner join 
+        pedido p ON c.id = p.cliente_id 
+    inner join 
+        item i ON p.id = i.pedido_id 
+    inner join 
+        produto pr ON i.produto_id = pr.id 
+    where 
+        c.id = p_cliente_id 
+    group by 
+        pr.nome, i.valor;
+end$$
+
 --
 -- Funções
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `verificar_estoque` (`produto_id` INT, `quantidade` INT) RETURNS TINYINT(1)  BEGIN
-  DECLARE estoque INT;
+CREATE DEFINER=`root`@`localhost` FUNCTION `verificar_estoque_pedido` (`pedido_id` INT) RETURNS TINYINT(4)  BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE produto_id INT;
+    DECLARE qtde_pedido INT;
+    DECLARE estoque INT;
+    DECLARE resultado TINYINT DEFAULT 1;
 
-  SELECT quantidade INTO estoque
-  FROM produto
-  WHERE id = produto_id;
+    DECLARE cur1 CURSOR FOR
+        SELECT p.id, i.qtde
+        FROM item i
+        JOIN produto p ON i.produto_id = p.id
+        WHERE i.pedido_id = pedido_id;
 
-  IF estoque < quantidade THEN
-    RETURN FALSE;
-  ELSE
-    RETURN TRUE;
-  END IF;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur1;
+
+    read_loop: LOOP
+        FETCH cur1 INTO produto_id, qtde_pedido;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        SELECT quantidade INTO estoque
+        FROM produto
+        WHERE id = produto_id;
+
+        IF estoque IS NULL OR estoque < qtde_pedido THEN
+            SET resultado = 0;
+            LEAVE read_loop;
+        END IF;
+    END LOOP;
+
+    CLOSE cur1;
+
+    RETURN resultado;
 end$$
 
 DELIMITER ;
@@ -270,7 +356,62 @@ INSERT INTO `item` (`pedido_id`, `produto_id`, `qtde`, `valor`) VALUES
 (50, 58, 1, 107),
 (51, 58, 5, 107),
 (52, 58, 5, 97),
-(53, 58, 8, 97);
+(53, 58, 8, 97),
+(54, 54, 1, 87),
+(54, 58, 3, 97),
+(54, 60, 1, 110),
+(55, 55, 1, 132),
+(55, 58, 1, 97),
+(55, 92, 1, 207),
+(55, 94, 1, 97),
+(55, 95, 2, 132),
+(56, 52, 1, 87),
+(56, 53, 1, 87),
+(56, 58, 1, 97),
+(56, 92, 1, 207),
+(58, 52, 2, 87),
+(58, 58, 1, 97),
+(58, 60, 1, 110),
+(58, 92, 1, 207),
+(62, 58, 1, 97),
+(62, 94, 1, 97),
+(64, 54, 1, 87),
+(64, 60, 1, 110),
+(70, 59, 1, 147),
+(72, 58, 1, 97),
+(73, 59, 1, 147),
+(74, 60, 1, 110),
+(76, 60, 1, 110),
+(82, 60, 1, 110),
+(83, 93, 1, 118),
+(84, 58, 1, 97),
+(85, 52, 1, 97),
+(85, 58, 1, 97),
+(86, 52, 1, 97),
+(87, 91, 1, 120),
+(88, 91, 1, 120),
+(89, 91, 1, 120),
+(93, 60, 1, 110),
+(94, 58, 1, 97),
+(113, 91, 1, 120),
+(114, 54, 1, 87),
+(114, 91, 1, 120),
+(115, 91, 1, 120),
+(117, 54, 1, 87),
+(117, 58, 1, 97),
+(117, 60, 1, 110),
+(117, 94, 1, 97),
+(117, 95, 1, 132),
+(118, 53, 1, 87),
+(118, 54, 1, 87),
+(118, 55, 1, 132),
+(118, 58, 1, 97),
+(118, 91, 1, 120),
+(119, 52, 1, 97),
+(119, 58, 1, 97),
+(119, 91, 1, 120),
+(119, 95, 1, 132),
+(120, 58, 1, 97);
 
 -- --------------------------------------------------------
 
@@ -330,7 +471,52 @@ INSERT INTO `pedido` (`id`, `cliente_id`, `data`, `preference_id`) VALUES
 (50, 13, '2025-11-26 04:05:51', '1077390063-3b8755a6-679c-4b6e-85b5-23800d23060c'),
 (51, 13, '2025-11-26 04:10:16', '1077390063-9ed6a3a2-6314-454a-8a58-a53852488d15'),
 (52, 13, '2025-11-26 04:16:20', '1077390063-aad205eb-7b69-4c4a-a254-cf2744aa5612'),
-(53, 13, '2025-11-26 04:22:10', '1077390063-9145dd64-f8a0-4947-b667-c3613b9904ea');
+(53, 13, '2025-11-26 04:22:10', '1077390063-9145dd64-f8a0-4947-b667-c3613b9904ea'),
+(54, 12, '2025-11-26 14:56:52', '1077390063-621d30c0-72b1-4484-a1f1-cfc49312f5cf'),
+(55, 12, '2025-11-26 22:36:15', '1077390063-f56cbbfd-d988-468b-bbab-ad43d4d6896a'),
+(56, 12, '2025-11-26 22:55:22', ''),
+(57, 12, '2025-11-26 22:55:30', ''),
+(58, 12, '2025-11-26 23:05:50', ''),
+(59, 12, '2025-11-26 23:06:00', ''),
+(60, 12, '2025-11-26 23:10:05', ''),
+(61, 12, '2025-11-26 23:10:18', ''),
+(62, 12, '2025-11-26 23:47:37', ''),
+(63, 12, '2025-11-26 23:47:45', ''),
+(64, 12, '2025-11-26 23:49:36', ''),
+(65, 12, '2025-11-26 23:50:53', ''),
+(66, 12, '2025-11-27 00:02:13', ''),
+(67, 12, '2025-11-27 00:02:18', ''),
+(68, 12, '2025-11-27 00:02:20', ''),
+(69, 12, '2025-11-27 00:02:25', ''),
+(70, 12, '2025-11-27 00:04:51', ''),
+(71, 12, '2025-11-27 00:05:17', ''),
+(72, 12, '2025-11-27 00:08:08', ''),
+(73, 12, '2025-11-27 00:08:17', ''),
+(74, 12, '2025-11-27 00:09:10', ''),
+(75, 12, '2025-11-27 00:11:40', ''),
+(76, 12, '2025-11-27 00:11:49', ''),
+(77, 12, '2025-11-27 05:01:10', ''),
+(78, 12, '2025-11-27 05:02:40', ''),
+(79, 12, '2025-11-27 05:03:34', ''),
+(80, 12, '2025-11-27 05:06:29', ''),
+(81, 12, '2025-11-27 05:07:41', ''),
+(82, 12, '2025-11-27 05:09:33', '1077390063-cbddfd4a-3e32-4468-8556-90b140791bf5'),
+(83, 12, '2025-11-27 05:17:25', '1077390063-c21d74e6-ace8-4b8a-87b9-299e660434d1'),
+(84, 12, '2025-11-27 05:28:36', '1077390063-0b3a3bb2-3556-41ec-8105-c0dec81e1b57'),
+(85, 12, '2025-11-27 05:32:05', '1077390063-0753fad7-c494-498d-8ef0-a71364f8801e'),
+(86, 12, '2025-11-27 05:34:24', '1077390063-2db2d4cd-a7cd-4e82-bc31-04d5030da79c'),
+(87, 12, '2025-11-27 05:34:40', '1077390063-046e3927-b706-433c-a55c-974c5672ef4d'),
+(88, 12, '2025-11-27 05:45:52', '1077390063-32dbe590-9f05-4513-8637-2d4c89d1408c'),
+(89, 12, '2025-11-27 05:46:53', '1077390063-245b9077-fee0-4d6b-b711-21d1e7087c2e'),
+(93, 12, '2025-11-27 06:23:26', '1077390063-5f79b782-90c1-4b06-b960-349fe1c94ed5'),
+(94, 12, '2025-11-27 07:21:25', '1077390063-c479ff30-714b-4085-a1c8-97fd6ad673b3'),
+(113, 12, '2025-11-27 08:20:59', '1077390063-86a0bd5c-6109-4257-beac-b72f72957343'),
+(114, 12, '2025-11-27 08:22:40', '1077390063-b6eb1f3d-cdef-4fc9-8471-938467e844db'),
+(115, 12, '2025-11-27 08:30:11', '1077390063-9fc2e002-4cd2-4563-b3fd-30bf77095c96'),
+(117, 12, '2025-11-27 09:16:55', '1077390063-3f0b4fcd-df18-4b6b-a5c9-b3d2eb1c6b26'),
+(118, 12, '2025-11-27 15:51:35', '1077390063-9b533a17-00d2-4ad0-8d3d-43bb395f112c'),
+(119, 12, '2025-11-27 15:52:27', '1077390063-c43b2830-ec75-43e4-84fb-47c7cf45a878'),
+(120, 12, '2025-11-27 15:54:34', '1077390063-e389d30d-85ec-4807-8f52-4a63104362e9');
 
 -- --------------------------------------------------------
 
@@ -356,19 +542,19 @@ CREATE TABLE `produto` (
 --
 
 INSERT INTO `produto` (`id`, `nome`, `categoria_id`, `autor`, `descricao`, `imagem`, `valor`, `destaque`, `ativo`, `quantidade`) VALUES
-(52, 'As Crônicas de Nárnia', 18, 'C. S. Lewis', '<p>Famoso livor de ficção infanto-juvenil do escritor irlandês C. S. Lewis</p>', '1764141845.jpg', 87, 'S', 'S', 0),
-(53, 'O Silmarillion', 18, 'J. R. Tolkien', '<p>Livro que contém as primeiras história do famoso universo de \"O Senhor dos Anéis\" Tolkien.</p>', '1764140817.jpg', 87, 'S', 'S', 20),
-(54, 'Direito Natural e História', 15, 'Leo Strauss', '<p>Importante obra que abordam de forma btilhante o tema do Direito Natural. O livro é uma busca para justificar e importância do direito natural, principalmente levando em consideração o século XX, século tanto das duas mais violentas e destrutivas guerras já registradas na história, como da ascensã dos regimes mais autoritários e também violentos da história humana. </p>', '1764137046.jpg', 87, 'S', 'S', 25),
-(55, 'Crime e Castigo', 16, 'Fiódor M. Dostoiévski', '<p>Importante obra de Dostoiéviski, Crime e Castigo narra a história de Raskólninkov, gênio matemático que foi tomado por uma noção niilista de mundo, e que tecidindo levar até o fim a sua tese comete um terrível ato que tanto marcará toda a sus história no livro, como servirá de importante ocasião para marcar o sentido da obra. </p>', '1764016547.jpg', 132, 'S', 'S', 0),
+(52, 'As Crônicas de Nárnia', 18, 'C. S. Lewis', '<p>Famoso livor de ficção infanto-juvenil do escritor irlandês C. S. Lewis</p>', '1764271315.jpg', 97, 'S', 'S', 0),
+(53, 'O Silmarillion', 18, 'J. R. Tolkien', '<p>Livro que contém as primeiras história do famoso universo de \"O Senhor dos Anéis\" Tolkien.</p>', '1764140817.jpg', 87, 'S', 'S', 18),
+(54, 'Direito Natural e História', 15, 'Leo Strauss', '<p>Importante obra que abordam de forma btilhante o tema do Direito Natural. O livro é uma busca para justificar e importância do direito natural, principalmente levando em consideração o século XX, século tanto das duas mais violentas e destrutivas guerras já registradas na história, como da ascensã dos regimes mais autoritários e também violentos da história humana. </p>', '1764137046.jpg', 87, 'S', 'S', 20),
+(55, 'Crime e Castigo', 16, 'Fiódor M. Dostoiévski', '<p>Importante obra de Dostoiéviski, Crime e Castigo narra a história de Raskólninkov, gênio matemático que foi tomado por uma noção niilista de mundo, e que tecidindo levar até o fim a sua tese comete um terrível ato que tanto marcará toda a sus história no livro, como servirá de importante ocasião para marcar o sentido da obra. </p>', '1764271355.jpg', 107, 'S', 'S', 0),
 (56, 'Apologia de Sócrates', 15, 'Platão', 'Narrando o fatídico epísódio do julgamento de Sócrates, esse diálogo platônico é um símbolo universal a filosofia. <br>Acusado de impiedade e de corromper a juventude, Sócrates defende a sua atividade como um chamamento divino, atividade que basicamente consisitia em, por meio da conversação, testar os limites da sabedoria dos sábios atenienses. O que é possível ver é que na atividade filosófica de Sócrates está a busca pela transicção da aparência da realidade para a própria realidade, que operada pelo jogo de perguntas respostas acaba por desunar o coração daqueles envolvidos pela conversação socrática - resultado nem sempre bem-vindo aos amantes da aparência que tinham revelada a sua verdadeira ignorância. ', '1764133154.jpg', 77, 'S', 'S', 25),
-(58, 'O Diário de Anne Frank', 17, 'Anne Frank', '<p>Essa é a famosa e imortal biografia de Anne Frank. O Diário contém auto-relatos que compreendem o período que vai de antes da Segunda Guerra Mundial até a Guerra, período em que a família de Anne, junto a ela, por ser judia, se escondeu em algum lugar da Holanda enquanto fugia das forças nazistas. </p>', '1764141758.jpg', 97, 'S', 'S', 17),
-(59, 'Jerusalém: A Biografia', 19, 'Simon Sebag Montefiore', 'Esse livro, escrito pelo renomado jornalista Simon S. Montefiore, discorre sobre a movimentada história milenar da cidade de Jerusalém, passando pela época do domínio dos judeus, ao período islâmido até os tempos modernos. ', '1764001821.jpg', 147, 'S', 'S', 14),
-(60, 'A República', 15, 'Platão', 'Sendo de forma incontestável o mais famoso diálogo de Platão, a República trata da busca filosófica pela compreensão do conceito de justiça. A universalidade do tema atinge amplamente todas as esferas humanas, indo da área teológica, às artes, à guerra, educação, propriedade etc. Para Platão o conceito de justiça não é meramente uma consideração a respeito do certo e do errado, antes tem certo status ontológico não por ser apenas uma forma (Ideia) que poder gerador, como o são as Ideias na teoria de Platão, mas sim mais alta e nobre configuraçõ da alma que por si equilibras e unidas todas as potências da alma, seja ela a potência da coragem, da sabedoria e da moderação. E como a cidade é o \'Homem em letras grandes\', a justiça é aquela que dá o ato de ser à nobre Pólis, que mesmo que não exista no campo da existência, ainda assim tem seu modelo, como diria o filósofo, guardado nos Céus. ', '1764140777.jpg', 110, 'S', 'S', 25),
-(91, 'Metafísica', 15, 'Aristóteles', 'Obra clássica da Filosofia', '1764001803.jpg', 120, 'S', 'S', 0),
-(92, 'Guerra e Paz, vols I e II', 16, 'Liev Tolstói', 'Romance histórico', '1764001778.jpg', 207, 'S', 'S', 0),
-(93, 'Trotsky: Uma Biografia', 17, 'Robert Service', 'Biografia de Léon Trotsky', '1764121699.jpg', 118, 'S', 'S', 19),
-(94, '1984', 18, 'George Orwell', 'Distopia clássica', '1764136365.jpg', 97, 'S', 'S', 30),
-(95, 'Memórias da II Guerra Mundial', 19, 'Wintson Chuchill', 'Relatos de Wintson Churchill sobre a Segunda Guerra Mundial', '1764001847.jpg', 142, 'N', 'S', 0);
+(58, 'O Diário de Anne Frank', 17, 'Anne Frank', '<p>Essa é a famosa e imortal biografia de Anne Frank. O Diário contém auto-relatos que compreendem o período que vai de antes da Segunda Guerra Mundial até a Guerra, período em que a família de Anne, junto a ela, por ser judia, se escondeu em algum lugar da Holanda enquanto fugia das forças nazistas. </p>', '1764141758.jpg', 97, 'S', 'S', 2),
+(59, 'Jerusalém: A Biografia', 19, 'Simon Sebag Montefiore', 'Esse livro, escrito pelo renomado jornalista Simon S. Montefiore, discorre sobre a movimentada história milenar da cidade de Jerusalém, passando pela época do domínio dos judeus, ao período islâmido até os tempos modernos. ', '1764001821.jpg', 147, 'S', 'S', 12),
+(60, 'A República', 15, 'Platão', 'Sendo de forma incontestável o mais famoso diálogo de Platão, a República trata da busca filosófica pela compreensão do conceito de justiça. A universalidade do tema atinge amplamente todas as esferas humanas, indo da área teológica, às artes, à guerra, educação, propriedade etc. Para Platão o conceito de justiça não é meramente uma consideração a respeito do certo e do errado, antes tem certo status ontológico não por ser apenas uma forma (Ideia) que poder gerador, como o são as Ideias na teoria de Platão, mas sim mais alta e nobre configuraçõ da alma que por si equilibras e unidas todas as potências da alma, seja ela a potência da coragem, da sabedoria e da moderação. E como a cidade é o \'Homem em letras grandes\', a justiça é aquela que dá o ato de ser à nobre Pólis, que mesmo que não exista no campo da existência, ainda assim tem seu modelo, como diria o filósofo, guardado nos Céus. ', '1764140777.jpg', 110, 'S', 'S', 17),
+(91, 'Metafísica', 15, 'Aristóteles', 'Obra clássica da Filosofia', '1764271417.jpg', 120, 'S', 'S', 0),
+(92, 'Guerra e Paz, vols I e II', 16, 'Liev Tolstói', 'Romance histórico', '1764271389.jpg', 207, 'S', 'S', 0),
+(93, 'Trotsky: Uma Biografia', 17, 'Robert Service', 'Biografia de Léon Trotsky', '1764121699.jpg', 118, 'S', 'S', 18),
+(94, '1984', 18, 'George Orwell', 'Distopia clássica', '1764136365.jpg', 97, 'S', 'S', 27),
+(95, 'Memórias da II Guerra Mundial', 19, 'Wintson Chuchill', 'Relatos de Wintson Churchill sobre a Segunda Guerra Mundial', '1764145341.jpg', 132, 'N', 'S', 6);
 
 --
 -- Acionadores `produto`
@@ -427,7 +613,16 @@ INSERT INTO `produto_quantidade_log` (`id`, `produto_id`, `nome_produto`, `quant
 (11, 58, 'O Diário de Anne Frank', 0, 10, '2025-11-26 04:09:57', 1, 'Bill Gates'),
 (12, 58, 'O Diário de Anne Frank', 10, 5, '2025-11-26 04:10:16', NULL, NULL),
 (13, 58, 'O Diário de Anne Frank', 0, 25, '2025-11-26 04:17:19', 1, 'Bill Gates'),
-(14, 52, 'As Crônicas de Nárnia', 7, 0, '2025-11-26 04:24:05', 1, 'Bill Gates');
+(14, 52, 'As Crônicas de Nárnia', 7, 0, '2025-11-26 04:24:05', 1, 'Bill Gates'),
+(15, 95, 'Memórias da II Guerra Mundial', 0, 10, '2025-11-26 05:22:21', 10, 'Gabriela Markus Chaves'),
+(16, 52, 'As Crônicas de Nárnia', -3, 0, '2025-11-26 23:35:24', 10, 'Gabriela Markus Chaves'),
+(17, 55, 'Crime e Castigo', -1, 0, '2025-11-26 23:35:49', 10, 'Gabriela Markus Chaves'),
+(18, 91, 'Metafísica', -6, 0, '2025-11-27 09:05:33', 10, 'Gabriela Markus Chaves'),
+(19, 52, 'As Crônicas de Nárnia', -2, 0, '2025-11-27 09:12:44', 10, 'Gabriela Markus Chaves'),
+(20, 52, 'As Crônicas de Nárnia', -1, 0, '2025-11-27 16:21:55', 10, 'Gabriela Markus Chaves'),
+(21, 55, 'Crime e Castigo', -1, 0, '2025-11-27 16:22:35', 10, 'Gabriela Markus Chaves'),
+(22, 92, 'Guerra e Paz, vols I e II', -3, 0, '2025-11-27 16:23:09', 10, 'Gabriela Markus Chaves'),
+(23, 91, 'Metafísica', -2, 0, '2025-11-27 16:23:37', 10, 'Gabriela Markus Chaves');
 
 -- --------------------------------------------------------
 
@@ -456,7 +651,10 @@ INSERT INTO `produto_valor_log` (`id`, `produto_id`, `nome_produto`, `valor_anti
 (3, 52, 'As Crônicas de Nárnia', 97.00, 87.00, '2025-11-26 03:31:03', 1, 'Bill Gates'),
 (4, 60, 'A República', 117.00, 110.00, '2025-11-26 03:48:25', 1, 'Bill Gates'),
 (5, 53, 'O Silmarillion', 97.00, 87.00, '2025-11-26 04:06:57', 1, 'Bill Gates'),
-(6, 58, 'O Diário de Anne Frank', 107.00, 97.00, '2025-11-26 04:09:57', 1, 'Bill Gates');
+(6, 58, 'O Diário de Anne Frank', 107.00, 97.00, '2025-11-26 04:09:57', 1, 'Bill Gates'),
+(7, 95, 'Memórias da II Guerra Mundial', 142.00, 132.00, '2025-11-26 05:22:21', 10, 'Gabriela Markus Chaves'),
+(8, 52, 'As Crônicas de Nárnia', 87.00, 97.00, '2025-11-26 23:35:24', 10, 'Gabriela Markus Chaves'),
+(9, 55, 'Crime e Castigo', 132.00, 107.00, '2025-11-27 16:22:35', 10, 'Gabriela Markus Chaves');
 
 -- --------------------------------------------------------
 
@@ -594,7 +792,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de tabela `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT de tabela `produto`
@@ -606,13 +804,13 @@ ALTER TABLE `produto`
 -- AUTO_INCREMENT de tabela `produto_quantidade_log`
 --
 ALTER TABLE `produto_quantidade_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `produto_valor_log`
 --
 ALTER TABLE `produto_valor_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`

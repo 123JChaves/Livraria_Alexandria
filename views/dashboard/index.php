@@ -34,6 +34,15 @@
                                     </a>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>DADOS CLIENTE</td>
+                                <td class="text-center">
+                                    <form action="dashboard/dadosCliente" method="post">
+                                        <input type="number" name="clienteId" placeholder="ID do Cliente" 
+                                        class="form-control rounded-pill" style="width: 150px; margin: 0 auto;">
+                                    </form>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
